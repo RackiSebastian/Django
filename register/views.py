@@ -1,9 +1,12 @@
 from django.shortcuts import render
 #Django automates register and login forms : )
-from django.contrib.auth import login,authenticate
-from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render,redirect
+from .forms import RegisterForm
+from django.urls import reverse_lazy
+from django.http import HttpResponse,HttpResponseNotFound,Http404,HttpResponseRedirect
 # Create your views here.
+
+
 
 def register(response):
     '''
@@ -12,12 +15,17 @@ def register(response):
     all built in features of django
     '''
     if response.method == 'POST':
-        form = UserCreationForm(response.POST)
+        form = RegisterForm(response.POST)
         if form.is_valid():
             form.save()
             #home page when we create one
-        return redirect("/home")
-    form = UserCreationForm()
+            success = reverse_lazy('/login/')
+        return HttpResponseRedirect('/login/')
+    form = RegisterForm()
     return render(response,"register/register.html",{"form":form})
+
+def login(response):
+    pass 
+
 
 
